@@ -1,45 +1,54 @@
 {
+  "name": "mod-1-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  
+    "scripts": {
+      "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+      "build": "tsc",
+      "start": "node dist/server.js",
+      "test": "jest --runInBand",
+      "test:watch": "jest --watch"
+    },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.7.2",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.3"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "firebase": "^12.4.0",
+    "express-winston": "^4.2.0",
     "firebase-admin": "^13.5.0",
     "helmet": "^8.1.0",
+    "http-status-codes": "^2.3.0",
     "joi": "^18.0.1",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
-    "winston": "^3.18.3"
-  },
-  "name": "assignment_04_bed",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "winston": "^3.18.3",
+    "zod": "^4.1.12"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NavpreetSingh584/Assignment_04_BED.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/NavpreetSingh584/Assignment_04_BED/issues"
   },
-  "homepage": "https://github.com/NavpreetSingh584/Assignment_04_BED#readme",
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/jest": "^30.0.0",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^24.7.1",
-    "@types/supertest": "^6.0.3",
-    "eslint": "^9.37.0",
-    "jest": "^30.2.0",
-    "prettier": "^3.6.2",
-    "supertest": "^7.1.4",
-    "ts-jest": "^29.4.5",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
-  }
+  "homepage": "https://github.com/NavpreetSingh584/Assignment_04_BED#readme"
 }
