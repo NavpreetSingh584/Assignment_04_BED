@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  
-    "scripts": {
-      "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-      "build": "tsc",
-      "start": "node dist/server.js",
-      "test": "jest --runInBand",
-      "test:watch": "jest --watch"
-    },
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
