@@ -1,0 +1,36 @@
+import morgan from "morgan";
+import fs from "fs";
+import path from "path";
+import { Request, Response } from "express";
+
+// ensure the logs directory actually exists '/logs'
+const logsDirectory: string = path.join(__dirname, "../../../logs");
+if (!fs.existsSync(logsDirectory)) {
+    fs.mkdirSync(logsDirectory, { recursive: true });
+}
+
+// creating a write stream for access logs i.e. any time there is a request to my api. 'a' === append file
+const accessLogStream = fs.createWriteStream(
+    path.join(logsDirectory, "access.log"),
+    { flags: "a" }
+);
+
+// creating a write stream for error logs i.e. any request that is error level status codes. 'a' === append file
+const errorLogStream = fs.createWriteStream(
+    path.join(logsDirectory, "error.log"),
+    { flags: "a" }
+);
+
+// creating an access logger using morgan that logs all incoming requests
+const accessLogger = morgan("combined", { stream: accessLogStream });
+
+// only logging requests if the status code is 4XX or 5XX codes (error level codes)
+const errorLogger = morgan("combined", {
+    stream: errorLogStream,
+    skip: (_req: Request, res: Response) => res.statusCode < 400,
+});
+
+// creating a console logger that logs requests to the terminal (developer-friendly)
+const consoleLogger = morgan("dev");
+
+export { accessLogger, errorLogger, consoleLogger };
