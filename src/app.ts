@@ -53,7 +53,7 @@ app.use(consoleLogger);
 
 // basic root route
 app.get("/", (req, res) => {
-    res.send("Server is running successfully");
+    res.status(200).json({ message: "Server is running successfully" });
 });
 
 /**
