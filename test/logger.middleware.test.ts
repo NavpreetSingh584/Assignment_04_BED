@@ -2,7 +2,6 @@ import express from "express";
 import request from "supertest";
 import { accessLogger, errorLogger } from "../src/api/v1/middleware/logger";
 
-// Mock setup BEFORE importing the logger module
 jest.mock("morgan", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 jest.mock("express-winston", () => ({
   errorLogger: jest.fn(() => (req: any, res: any, next: any) => next()),

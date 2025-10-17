@@ -2,6 +2,8 @@
 import express, { Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
+import authRouter from "../src/api/v1/routes/auth.routes";
+import adminRouter from "../src/api/v1/routes/admin.routes";
 
 // route imports
 import v1Routes from "./api/v1/routes";
@@ -86,3 +88,7 @@ app.use(errorHandler);
 
 // export the express app
 export default app;
+
+
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/admin", adminRouter);
