@@ -78,17 +78,15 @@ app.get("/api/v1/health", (req, res) => {
 // prefixes all version 1 API routes with "/api/v1"
 app.use("/api/v1", v1Routes);
 
+// mount authentication and admin routes
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/admin", adminRouter);
 
 // API Routes END
 
 
 // Global Error Handling (MUST BE LAST)
-
 app.use(errorHandler);
 
 // export the express app
 export default app;
-
-
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/admin", adminRouter);
