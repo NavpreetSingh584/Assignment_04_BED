@@ -127,11 +127,78 @@ export const updateLoanStatus = (
 };
 
 /**
+ * Manages requests and responses to review a Loan.
+ * @param req - The express Request object
+ * @param res - The express Response object
+ * @param next - The express middleware chaining function
+ */
+export const reviewLoan = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
+    try {
+        const { id } = req.params;
+        const loan = loans.find((l) => l.id === id);
+
+        // If loan not found, return 404
+        if (!loan) {
+            res.status(HTTP.NOT_FOUND).json({ message: "Loan not found" });
+            return;
+        }
+
+        // Update loan status to UNDER_REVIEW
+        loan.status = "UNDER_REVIEW";
+        loan.updatedAt = new Date().toISOString();
+
+        res.status(HTTP.OK).json({
+            message: "Loan moved to UNDER_REVIEW status successfully",
+            data: loan,
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};
+
+/**
+ * Manages requests and responses to approve a Loan.
+ * @param req - The express Request object
+ * @param res - The express Response object
+ * @param next - The express middleware chaining function
+ */
+export const approveLoan = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
+    try {
+        const { id } = req.params;
+        const loan = loans.find((l) => l.id === id);
+
+        // If loan not found, return 404
+        if (!loan) {
+            res.status(HTTP.NOT_FOUND).json({ message: "Loan not found" });
+            return;
+        }
+
+        // Update loan status to APPROVED
+        loan.status = "APPROVED";
+        loan.updatedAt = new Date().toISOString();
+
+        res.status(HTTP.OK).json({
+            message: "Loan approved successfully",
+            data: loan,
+        });
+    } catch (error: unknown) {
+        next(error);
+    }
+};
+
+/**
  * Manages requests and responses to delete a Loan by ID.
  * @param req - The express Request object
  * @param res - The express Response object
  */
-
 export const deleteLoan = (
     req: Request,
     res: Response

@@ -2,8 +2,9 @@ import admin from "firebase-admin";
 import { readFileSync } from "fs";
 import path from "path";
 
-if (!admin.apps.length) {
-  try {
+// --- Safe initialization ---
+try {
+  if (!admin?.apps || !Array.isArray(admin.apps) || admin.apps.length === 0) {
     const credsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
     if (credsPath) {
       const content = readFileSync(path.resolve(credsPath), "utf8");
@@ -12,13 +13,20 @@ if (!admin.apps.length) {
         credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
       });
     } else {
+      // ✅ fallback for tests
       admin.initializeApp();
     }
-  } catch (error) {
-    admin.initializeApp();
+  }
+} catch (error: any) {
+  console.warn("⚠️ Firebase initialization skipped:", error.message);
+  if (!admin?.apps || admin.apps.length === 0) {
+    try {
+      admin.initializeApp();
+    } catch (_) {}
   }
 }
 
+// --- Exports ---
 export const auth = (() => {
   try {
     return admin.auth();
@@ -47,3 +55,5 @@ export const db = (() => {
     } as unknown as admin.firestore.Firestore;
   }
 })();
+
+export default admin;

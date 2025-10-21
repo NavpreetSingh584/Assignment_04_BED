@@ -1,29 +1,37 @@
-import express from "express";
-import request from "supertest";
-import { accessLogger, errorLogger } from "../src/api/v1/middleware/logger";
+import { Request, Response, NextFunction } from "express";
+import httpMocks from "node-mocks-http";
 
-jest.mock("morgan", () => jest.fn(() => (req: any, res: any, next: any) => next()));
-jest.mock("express-winston", () => ({
-  errorLogger: jest.fn(() => (req: any, res: any, next: any) => next()),
-}));
+jest.mock("morgan", () => {
+  return jest.fn(() => (req: any, res: any, next: any) => {
+    if (next) next(); // simulate morgan calling next()
+  });
+});
 
-describe("Logging Middleware", () => {
-  it("should register and run logging middleware without crashing", async () => {
-    const app = express();
+import { accessLogger, consoleLogger } from "../src/api/v1/middleware/logger";
 
-    app.use(accessLogger);
-    app.use(errorLogger);
+describe("Logger Middleware", () => {
+  let req: Request;
+  let res: Response;
+  let next: NextFunction;
 
-    app.get("/", (_req, res) => res.status(200).send("OK"));
+  beforeEach(() => {
+    req = httpMocks.createRequest({
+      method: "GET",
+      url: "/test",
+      headers: { "user-agent": "jest-test" },
+    }) as unknown as Request;
 
-    const res = await request(app).get("/");
+    res = httpMocks.createResponse() as unknown as Response;
+    next = jest.fn();
+  });
 
-    // Verify app still works correctly
-    expect(res.status).toBe(200);
-    expect(res.text).toBe("OK");
+  it("should call next in accessLogger", () => {
+    accessLogger(req, res, next);
+    expect(next).toHaveBeenCalled(); 
+  });
 
-    // Verify mocks exist and did not throw
-    const morgan = require("morgan");
-    expect(morgan).toBeDefined();
+  it("should call next in consoleLogger", () => {
+    consoleLogger(req, res, next);
+    expect(next).toHaveBeenCalled(); 
   });
 });

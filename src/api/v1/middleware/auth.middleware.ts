@@ -13,7 +13,7 @@ import { ApiError } from "../errors/ApiError";
  * @param _res - The Express Response object (not used in this middleware)
  * @param next - The Express middleware chaining function
  */
-export async function authenticate(
+export async function verifyToken(
     req: Request,
     _res: Response,
     next: NextFunction
@@ -50,3 +50,41 @@ export async function authenticate(
         next(ApiError.unauthorized("Invalid or expired token"));
     }
 }
+
+/**
+ * Middleware to check if the authenticated user has the 'admin' role.
+ * 
+ * Ensures only users with an admin role can access certain routes.
+ * Should be used after verifyToken middleware.
+ * 
+ * @param req - The Express Request object
+ * @param _res - The Express Response object (not used)
+ * @param next - The Express middleware chaining function
+ */
+export function checkAdmin(
+    req: Request,
+    _res: Response,
+    next: NextFunction
+): void {
+    try {
+        const userRole = (req.user as any)?.role;
+
+        if (userRole !== "admin") {
+            throw ApiError.forbidden("Access denied: Admins only");
+        }
+
+        next();
+    } catch (error: unknown) {
+        next(ApiError.forbidden("Access denied: Admins only"));
+    }
+}
+
+export const setUserRole = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { uid, role } = req.body;
+    await auth.setCustomUserClaims(uid, { role });
+    res.status(200).json({ message: `Role '${role}' set for UID ${uid}` });
+  } catch (error) {
+    next(error);
+  }
+};

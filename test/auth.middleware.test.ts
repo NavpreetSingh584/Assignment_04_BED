@@ -48,4 +48,20 @@ describe("Authentication Middleware", () => {
     expect(res.body?.success ?? true).toBe(true);
     expect(res.body?.data?.uid ?? "user123").toBe("user123");
   });
+  
+  describe("Extra Auth Middleware Tests", () => {
+  it("should return 401 if invalid token format", async () => {
+    const res = await request(app)
+      .get("/api/v1/auth/me")
+      .set("Authorization", "InvalidFormat");
+    expect(res.status).toBe(401); 
+  });
+
+  it("should return 401 if token missing Bearer keyword", async () => {
+    const res = await request(app)
+      .get("/api/v1/auth/me")
+      .set("Authorization", "12345");
+    expect(res.status).toBe(401);
+  });
+});
 });

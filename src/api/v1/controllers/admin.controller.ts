@@ -19,3 +19,5 @@ export const setRole = async (req: Request, res: Response) => {
 
     res.json({ message: `Role '${role}' set for user ${uid}` });
 };
+
+

@@ -1,9 +1,22 @@
-import { Router } from 'express';
-import { getMe, getUser} from '../controllers/auth.controller';
-import { authenticate } from '../middleware/auth.middleware';
+import { Router } from "express";
+import { setUserRole, getMe, getUser } from "../controllers/auth.controller";
+import { verifyToken, checkAdmin } from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.get('/me', authenticate, getMe);
-router.get("/users/:uid", getUser);
+/**
+ * GET /api/v1/auth/me
+ */
+router.get("/me", verifyToken, getMe);
+
+/**
+ * GET /api/v1/auth/users/:uid
+ */
+router.get("/users/:uid", verifyToken, checkAdmin, getUser);
+
+/**
+ * POST /api/v1/auth/set-role
+ */
+router.post("/set-role", verifyToken, checkAdmin, setUserRole);
+
 export default router;

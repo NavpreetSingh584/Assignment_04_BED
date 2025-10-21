@@ -1,59 +1,48 @@
 import express, { Router } from "express";
 import * as loanController from "../controllers/loans.controller";
-import { authenticate } from "../middleware/auth.middleware";
+import { verifyToken } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
 
 const router: Router = express.Router();
 
-/**
- * Routes for managing loan applications.
- * Prefix: "/api/v1/loans"
- *
- * Policy Overview:
- * - Create: officer, admin
- * - List/Get: officer, analyst, admin, auditor
- * - Update: officer, admin
- * - Delete: admin only
- */
-
 // Retrieve all loan applications
 router.get(
-    "/",
-    authenticate,
-    authorize({ roles: ["officer", "analyst", "admin", "auditor"] }),
-    loanController.getAllLoans
+  "/",
+  verifyToken,
+  authorize({ roles: ["officer", "analyst", "admin", "auditor"] }),
+  loanController.getAllLoans
 );
 
-// Retrieve a specific loan by ID
-router.get(
-    "/:id",
-    authenticate,
-    authorize({ roles: ["officer", "analyst", "admin", "auditor"] }),
-    loanController.getLoanById
-);
-
-// Create a new loan application
+// Create a new loan
 router.post(
-    "/",
-    authenticate,
-    authorize({ roles: ["officer", "admin"] }),
-    loanController.createLoan
+  "/",
+  verifyToken,
+  authorize({ roles: ["officer", "admin"] }),
+  loanController.createLoan
 );
 
-// Update the status of an existing loan
+// Review a loan (analyst, admin)
+router.post(
+  "/:id/review",
+  verifyToken,
+  authorize({ roles: ["analyst", "admin"] }),
+  loanController.reviewLoan
+);
+
+// Approve a loan (officer, admin)
 router.put(
-    "/:id/status",
-    authenticate,
-    authorize({ roles: ["officer", "admin"] }),
-    loanController.updateLoanStatus
+  "/:id/approve",
+  verifyToken,
+  authorize({ roles: ["officer", "admin"] }),
+  loanController.approveLoan
 );
 
-// Delete a loan application (Admin only)
+// Delete a loan (admin only)
 router.delete(
-    "/:id",
-    authenticate,
-    authorize({ roles: ["admin"] }),
-    loanController.deleteLoan
+  "/:id",
+  verifyToken,
+  authorize({ roles: ["admin"] }),
+  loanController.deleteLoan
 );
 
 export default router;

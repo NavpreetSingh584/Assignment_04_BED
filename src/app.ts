@@ -4,6 +4,9 @@ import cors from "cors";
 import helmet from "helmet";
 import authRouter from "../src/api/v1/routes/auth.routes";
 import adminRouter from "../src/api/v1/routes/admin.routes";
+import authRoutes from "./api/v1/routes/auth.routes";
+import claimsRoutes from "./api/v1/routes/claims.routes";
+import loansRoutes from "./api/v1/routes/loans.routes";
 
 // route imports
 import v1Routes from "./api/v1/routes";
@@ -87,6 +90,11 @@ app.use("/api/v1/admin", adminRouter);
 
 // Global Error Handling (MUST BE LAST)
 app.use(errorHandler);
+
+
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/claims", claimsRoutes);
+app.use("/api/v1/loans", loansRoutes);
 
 // export the express app
 export default app;
