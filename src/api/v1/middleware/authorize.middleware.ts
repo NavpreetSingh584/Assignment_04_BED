@@ -23,7 +23,7 @@ export function authorize(opts: AuthorizeOptions) {
     return (req: Request, _res: Response, next: NextFunction) => {
         try {
             // Retrieve authenticated user from request (set in auth middleware)
-            const user = req.user;
+            const user = (req as any);
 
             // If user does not exist, they are not authenticated
             if (!user) {

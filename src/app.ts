@@ -2,13 +2,12 @@
 import express, { Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
-import authRouter from "../src/api/v1/routes/auth.routes";
-import adminRouter from "../src/api/v1/routes/admin.routes";
+
+// route imports (fixed paths)
 import authRoutes from "./api/v1/routes/auth.routes";
+import adminRoutes from "./api/v1/routes/admin.routes";
 import claimsRoutes from "./api/v1/routes/claims.routes";
 import loansRoutes from "./api/v1/routes/loans.routes";
-
-// route imports
 import v1Routes from "./api/v1/routes";
 
 // middleware imports
@@ -50,7 +49,6 @@ app.use(accessLogger);
 app.use(errorLogger);
 app.use(consoleLogger);
 
-
 // Middleware END
 
 
@@ -82,19 +80,16 @@ app.get("/api/v1/health", (req, res) => {
 app.use("/api/v1", v1Routes);
 
 // mount authentication and admin routes
-app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/claims", claimsRoutes);
+app.use("/api/v1/loans", loansRoutes);
 
 // API Routes END
 
 
 // Global Error Handling (MUST BE LAST)
 app.use(errorHandler);
-
-
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/claims", claimsRoutes);
-app.use("/api/v1/loans", loansRoutes);
 
 // export the express app
 export default app;

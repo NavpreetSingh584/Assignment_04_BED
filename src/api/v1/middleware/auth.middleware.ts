@@ -37,7 +37,7 @@ export async function verifyToken(
 
         // Attach the decoded user data to the request object
         // This makes user information (uid, email, role, etc.) available to subsequent routes
-        req.user = {
+        (req as any).user = {
             uid: decoded.uid,
             email: decoded.email,
             ...(decoded as any),
@@ -67,7 +67,7 @@ export function checkAdmin(
     next: NextFunction
 ): void {
     try {
-        const userRole = (req.user as any)?.role;
+        const userRole = (req as any).user?.role;
 
         if (userRole !== "admin") {
             throw ApiError.forbidden("Access denied: Admins only");
